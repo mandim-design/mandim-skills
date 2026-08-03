@@ -44,6 +44,13 @@ Building and tuning the AI systems and tooling themselves.
 | [prompt-optimizer](ai-engineering/prompt-optimizer/SKILL.md) | Transforms rough ideas and weak prompts into production-quality prompts, using real technique. |
 | [web-artifacts-builder](ai-engineering/web-artifacts-builder/SKILL.md) | Bootstraps and bundles web-based Claude Artifacts, including a shadcn/ui component set. |
 
+### 🗂️ Productivity & Operations
+Running the day-to-day: personal task management, planning, and execution.
+
+| Skill | Description |
+|---|---|
+| [daily-ops-copilot](productivity-operations/daily-ops-copilot/SKILL.md) | A configurable Notion + Slack (+ optional Calendar) task and project command center — daily sweeps, capacity-aware planning, and sprint reviews. |
+
 ## License
 
 MIT — see [LICENSE](LICENSE). The `web-artifacts-builder` skill bundles its own [Apache 2.0 license](ai-engineering/web-artifacts-builder/LICENSE.txt) from Anthropic, which applies to that folder specifically.
