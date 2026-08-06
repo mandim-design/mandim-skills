@@ -86,6 +86,19 @@ A plain Notion page with two child tables (or even a structured text block, if y
   4. **Effort vs. capacity** — fit the day to the target above; mix one chunky item with quick wins rather than stacking heavy tasks.
   5. Any custom tie-breakers: `{{CUSTOM_TIEBREAKERS}}` (e.g. business-hours-only tasks go on weekdays, anything blocking someone else jumps the queue).
 
+## Recurring tasks (optional)
+
+If you want a separate "standing chores/errands" source that gets pre-loaded into the real task databases ahead of each week (see `routines.md → Recurring task preload`), define it here rather than adding permanent recurring rows to the task databases themselves.
+
+- Data source ID: `{{RECURRING_TASKS_DS_ID}}`. Title property: `{{RECURRING_TASKS_TITLE_PROP}}`.
+- `Type` property (routes each row to the right destination database): `{{RECURRING_TYPE_PROP}}` — values matching your destination databases, e.g. Work / Personal.
+- `Day` property (weekday the instance lands on): `{{RECURRING_DAY_PROP}}` — one value per weekday.
+- `Priority` property: `{{RECURRING_PRIORITY_PROP}}`.
+- `Cadence` property (how often a row actually gets instantiated — every run, or every Nth): `{{RECURRING_CADENCE_PROP}}`, and the exact values/windows each one means, e.g. `Weekly` = every run, `Biweekly` = skip if an instance exists within the last ~14 days.
+- `Active` property (checkbox — unchecked rows are paused, not deleted): `{{RECURRING_ACTIVE_PROP}}`.
+- Any other columns worth noting (e.g. `Notes`): `{{RECURRING_OTHER_PROPS}}`.
+- Don't assume this source has the same properties as your task databases (e.g. a `Category` a task database has doesn't necessarily exist here, or vice versa) — read its actual live schema, don't carry assumptions from the task databases over.
+
 ## Saved views (optional)
 List any pre-built Notion views this skill should point to instead of re-deriving them, e.g. a "Today" view (`Due = today`) or an "Overdue" view (grouped by status, since Notion's view DSL can't filter by a status *value* directly — group by status instead): `{{SAVED_VIEWS}}`.
 

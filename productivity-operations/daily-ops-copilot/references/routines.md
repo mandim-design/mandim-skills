@@ -105,3 +105,21 @@ Run for every sprint-tracked database configured.
 4. **Sprint hygiene**: confirm each sprint's naming and date convention (see `config.md → Sprint naming`) is followed; fix the upcoming sprint's name/dates if it's still a placeholder. Leave blank database template rows alone.
 5. **Archive**: set `Done` tasks from sprints that have *ended* to "Archived." Leave the current sprint's `Done` items alone — they're the review's evidence.
 6. Report: what got done, what's carrying over, and the focus for next sprint — per track.
+
+---
+
+## Recurring task preload
+
+Typically scheduled weekly (e.g. Sunday night) — also runnable on demand. Reads a separate **Recurring Tasks** source (`config.md → Recurring tasks`) of standing chores/errands and creates next week's instances ahead of time, so the week is ready before it starts, without flooding the backlog early.
+
+This is the one routine most likely to run unattended with no conversation history behind it. Everything it needs — IDs, schema, property names — lives in `config.md`; re-read it each run rather than trusting anything cached from a prior run.
+
+1. **Compute the target week** from the real current date (read the system clock — never assume or hardcode "today"). The target week is the next Monday through the following Sunday. If this routine runs on its usual Sunday-night schedule, the target Monday should be tomorrow — a quick sanity check that the date math didn't drift.
+2. **Read the Recurring Tasks source.** Consider only rows where `Active` is checked; skip anything unchecked (paused, not deleted — leave it alone).
+3. **For each active row**, in the matching destination database (per its `Type`):
+   a. Due date = the date of its configured weekday within the target week.
+   b. **Cadence gate**: if the row's cadence is less-than-weekly (e.g. biweekly/monthly), check the destination database for an equivalent task (by name) created or due within that cadence's window; if one exists, skip — it isn't due yet this cycle. A weekly cadence never skips on this check.
+   c. **Dedup guard**: skip if an equivalent task already exists in the destination with a `Due` inside the target week — belt-and-suspenders alongside the cadence gate.
+   d. **Create the task**: template applied, `Priority` from the row, `Due` set to the computed date, `Source` left blank (this didn't come from Slack) unless the row itself links to a source doc.
+   e. **Sprint link — match by date range, not status label.** Find the sprint (in the matching track) whose `Dates` span covers the target week. A Sunday-night run will often find that sprint still marked "upcoming"/"next" rather than "current" — that's expected, not a bug; match on the date range regardless of status. If no sprint yet covers the target week, don't invent one: create the task with the correct `Due`, leave it without a sprint link, and flag that clearly in the report so the user can link it once the sprint exists.
+4. **Report** (short): what was added (name + day), and what was skipped and why — cadence not due yet, already existed, or no sprint yet to link to. No padding; an empty category just says so in one line.
