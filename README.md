@@ -33,6 +33,7 @@ Evaluating and building the product experience itself.
 | Skill | Description |
 |---|---|
 | [figma-to-storybook](product-design/figma-to-storybook/SKILL.md) | Reads a Figma Design System via the Desktop Bridge MCP and builds a pixel-accurate Storybook. |
+| [mandim-webflow-standards](product-design/mandim-webflow-standards/SKILL.md) | Enforces Client-First naming, HTML/JS/GSAP, performance, and accessibility standards for Webflow projects. |
 | [ux-product-auditor](product-design/ux-product-auditor/SKILL.md) | Senior-level UX, CRO, and product-strategy audits tied to business outcomes. |
 
 ### 🤖 AI Engineering
