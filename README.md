@@ -27,6 +27,13 @@ Turning strategy into audience-facing content, campaigns, and copy.
 | [newsletter-writer](marketing-content/newsletter-writer/SKILL.md) | Writes newsletters and marketing emails built to educate, engage, and convert. |
 | [youtube-producer](marketing-content/youtube-producer/SKILL.md) | Plans, packages, and scripts long-form YouTube videos for retention and channel growth. |
 
+### ✍️ Writing & Editing
+Working on the prose itself, whatever it is for.
+
+| Skill | Description |
+|---|---|
+| [humanizer](writing-editing/humanizer/SKILL.md) | Strips the tells of AI-generated writing from a draft, following Wikipedia's "Signs of AI writing" guide. |
+
 ### 🎨 Product & Design
 Evaluating and building the product experience itself.
 
@@ -54,7 +61,10 @@ Running the day-to-day: personal task management, planning, and execution.
 
 ## License
 
-MIT — see [LICENSE](LICENSE). The `web-artifacts-builder` skill bundles its own [Apache 2.0 license](ai-engineering/web-artifacts-builder/LICENSE.txt) from Anthropic, which applies to that folder specifically.
+MIT — see [LICENSE](LICENSE). Two skills are third-party and carry their own license, which applies to that folder specifically:
+
+- `web-artifacts-builder` — [Apache 2.0](ai-engineering/web-artifacts-builder/LICENSE.txt), from Anthropic.
+- `humanizer` — [MIT](writing-editing/humanizer/LICENSE), by Siqi Chen ([blader/humanizer](https://github.com/blader/humanizer)).
 
 ## Adding a new skill
 
