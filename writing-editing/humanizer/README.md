@@ -1,66 +1,6 @@
 # Humanizer
 
-[![skills.sh installs](https://skills.sh/b/blader/humanizer)](https://skills.sh/blader/humanizer)
-
 A portable agent skill that removes signs of AI-generated writing from text, making it sound more natural and human. It is plain Markdown, so it can run in any harness that supports skill-style instructions.
-
-## Installation
-
-### Skills CLI
-
-Install globally with the cross-agent skills CLI so Humanizer is available in every project:
-
-```bash
-npx skills add blader/humanizer --global
-```
-
-Update an existing install:
-
-```bash
-npx skills update humanizer --global
-```
-
-To install globally into every supported agent harness:
-
-```bash
-npx skills add blader/humanizer --global --agent '*'
-```
-
-To target one configured harness, pass its agent name:
-
-```bash
-npx skills add blader/humanizer --global --agent <agent-name>
-```
-
-Omit `--global` for a project-local install that can be committed and shared with collaborators. Start a new agent session or reload skills after installation.
-
-### Claude Code plugin
-
-Claude Code users can also install Humanizer as a plugin:
-
-```
-/plugin marketplace add blader/humanizer
-/plugin install humanizer@humanizer
-```
-
-The skill is then invoked as `/humanizer:humanizer`.
-
-### Manual
-
-Any agent harness can use the skill directly because the runtime artifact is `SKILL.md`. Install it wherever your harness expects skill directories, or copy `SKILL.md` into an existing skill folder.
-
-For example:
-
-```bash
-git clone https://github.com/blader/humanizer.git /path/to/your/skills/humanizer
-```
-
-Or, if you already have this repo cloned:
-
-```bash
-mkdir -p /path/to/your/skills/humanizer
-cp SKILL.md /path/to/your/skills/humanizer/
-```
 
 ## Usage
 
