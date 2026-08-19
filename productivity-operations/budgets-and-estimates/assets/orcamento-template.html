@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposta — MANDIM.</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color--border: #1d1d1d;
+    --color--text: #1d1d1d;
+    --color--background: #fafafa;
+    --color--muted: #6a6a6a;
+    --color--light: #b0b0b0;
+    --color--surface: #f2f2f0;
+    --font: 'Roboto Mono', 'Courier New', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font);
+    background: var(--color--background);
+    color: var(--color--text);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .header {
+    padding: 32px 64px;
+    border-bottom: 1px solid var(--color--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo { font-size: 14px; font-weight: 700; letter-spacing: 0.02em; }
+
+  .header-meta {
+    font-size: 11px;
+    color: var(--color--muted);
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  .hero {
+    padding: 80px 64px 72px;
+    border-bottom: 1px solid var(--color--border);
+  }
+
+  .section-label {
+    font-size: 11px;
+    color: var(--color--muted);
+    letter-spacing: 0.06em;
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .section-label .lbl::before { content: '↳ '; }
+  .section-label .dot { font-size: 18px; line-height: 1; }
+
+  .hero-title {
+    font-size: clamp(48px, 6.5vw, 80px);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .hero-title .sub {
+    display: block;
+    font-size: clamp(18px, 2.4vw, 28px);
+    font-weight: 300;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--color--muted);
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .hero-desc {
+    margin-top: 28px;
+    font-size: 12px;
+    color: var(--color--muted);
+    max-width: 520px;
+    line-height: 1.75;
+    font-style: italic;
+  }
+
+  .section {
+    padding: 64px 64px 56px;
+    border-bottom: 1px solid var(--color--border);
+  }
+
+  .ov-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--color--border);
+    margin-top: 8px;
+  }
+
+  .ov-cell {
+    padding: 22px 28px;
+    border-right: 1px solid var(--color--border);
+  }
+
+  .ov-cell:last-child,
+  .ov-cell:nth-child(3) { border-right: none; }
+  .ov-cell:nth-child(n+4) { border-top: 1px solid var(--color--border); }
+
+  .ov-lbl {
+    font-size: 10px;
+    color: var(--color--light);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .ov-val { font-size: 13px; font-weight: 700; }
+  .ov-val.muted { font-weight: 700; font-size: 13px; color: var(--color--muted); }
+
+  .placeholder {
+    display: inline-block;
+    background: #ebebeb;
+    color: #ebebeb;
+    border-radius: 2px;
+    min-width: 120px;
+    height: 1em;
+    vertical-align: middle;
+    user-select: none;
+  }
+  .placeholder.sm { min-width: 70px; }
+  .placeholder.lg { min-width: 180px; }
+
+  .note {
+    margin-top: 16px;
+    border: 1px solid var(--color--border);
+    padding: 16px 20px;
+    font-size: 11.5px;
+    color: var(--color--muted);
+    line-height: 1.75;
+    font-style: italic;
+  }
+
+  .phase { margin-bottom: 0; }
+  .phase + .phase { margin-top: 40px; }
+
+  .phase-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 1px solid var(--color--border);
+    padding-top: 14px;
+    margin-bottom: 20px;
+  }
+
+  .phase-id { font-size: 11px; color: var(--color--muted); font-weight: 400; }
+
+  .phase-name {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    flex: 1;
+    padding: 0 24px;
+  }
+
+  .phase-hrs { font-size: 11px; color: var(--color--muted); text-align: right; white-space: nowrap; }
+  .phase-hrs strong { font-weight: 700; color: var(--color--text); font-size: 13px; }
+
+  .task-list { padding-left: 0; list-style: none; }
+
+  .task-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 0;
+    border-top: 1px solid #e0e0de;
+    padding: 11px 0;
+    align-items: start;
+  }
+
+  .task-row:first-child { border-top: none; }
+  .task-name { font-size: 12px; font-weight: 500; padding-right: 24px; }
+
+  .task-desc {
+    font-size: 11px;
+    color: var(--color--muted);
+    line-height: 1.6;
+    font-style: italic;
+    padding-right: 24px;
+  }
+
+  .total-block { border: 1px solid var(--color--border); margin-top: 8px; }
+
+  .total-inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    border-top: none;
+  }
+
+  .total-cell { padding: 28px 32px; border-right: 1px solid var(--color--border); }
+  .total-cell:last-child { border-right: none; }
+
+  .total-lbl {
+    font-size: 10px;
+    color: var(--color--light);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+
+  .total-val { font-size: 36px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
+  .total-val.md { font-size: 22px; }
+  .total-val.muted { font-size: 18px; font-weight: 300; color: var(--color--muted); }
+  .total-sub { font-size: 11px; color: var(--color--muted); margin-top: 6px; font-style: italic; }
+
+  .cond-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--color--border);
+    margin-top: 8px;
+  }
+
+  .cond-cell { padding: 24px 28px; border-right: 1px solid var(--color--border); }
+  .cond-cell:nth-child(2n) { border-right: none; }
+  .cond-cell:nth-child(n+3) { border-top: 1px solid var(--color--border); }
+
+  .cond-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+
+  .cond-item {
+    font-size: 12px;
+    color: var(--color--muted);
+    line-height: 1.7;
+    padding-left: 14px;
+    position: relative;
+    margin-bottom: 4px;
+  }
+
+  .cond-item::before { content: '—'; position: absolute; left: 0; color: var(--color--light); }
+  .cond-item strong { color: var(--color--text); font-weight: 700; }
+
+  .tl-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--color--border);
+    margin-top: 8px;
+  }
+
+  .tl-cell { padding: 20px 20px; border-right: 1px solid var(--color--border); }
+  .tl-cell:last-child { border-right: none; }
+  .tl-id { font-size: 10px; color: var(--color--light); margin-bottom: 8px; }
+
+  .tl-phase {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+  }
+
+  .tl-weeks { font-size: 11px; color: var(--color--muted); margin-bottom: 6px; font-style: italic; }
+  .tl-desc { font-size: 11px; color: var(--color--muted); line-height: 1.5; }
+
+  .ex-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 1px solid var(--color--border);
+    margin-top: 8px;
+  }
+
+  .ex-cell {
+    padding: 16px 20px;
+    border-right: 1px solid var(--color--border);
+    border-bottom: 1px solid var(--color--border);
+    font-size: 12px;
+    color: var(--color--muted);
+    line-height: 1.5;
+    display: flex;
+    gap: 10px;
+  }
+
+  .ex-cell:nth-child(3n) { border-right: none; }
+  .ex-cell:nth-child(n+7) { border-bottom: none; }
+  .ex-x { color: var(--color--light); flex-shrink: 0; font-size: 11px; margin-top: 1px; }
+
+  .pay-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid var(--color--border);
+    margin-top: 8px;
+  }
+
+  .pay-cell { padding: 28px 32px; border-right: 1px solid var(--color--border); }
+  .pay-cell:last-child { border-right: none; }
+
+  .pay-lbl {
+    font-size: 10px;
+    color: var(--color--light);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+
+  .pay-val { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 4px; }
+  .pay-desc { font-size: 11px; color: var(--color--muted); font-style: italic; }
+
+  .footer {
+    padding: 28px 64px;
+    border-top: 1px solid var(--color--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: var(--color--muted);
+    gap: 32px;
+  }
+
+  .footer-left { display: flex; align-items: center; gap: 6px; white-space: nowrap; flex-shrink: 0; }
+
+  .footer-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+  }
+
+  .footer-line { white-space: nowrap; line-height: 1.6; }
+
+  @media (max-width: 900px) {
+    .header, .hero, .section, .footer { padding-left: 36px; padding-right: 36px; }
+    .hero { padding-top: 56px; padding-bottom: 52px; }
+    .ov-grid { grid-template-columns: 1fr 1fr; }
+    .ov-cell:nth-child(2n) { border-right: none; }
+    .ov-cell:nth-child(3) { border-right: 1px solid var(--color--border); }
+    .ov-cell:nth-child(n+3) { border-top: 1px solid var(--color--border); }
+    .tl-grid { grid-template-columns: 1fr 1fr; }
+    .tl-cell:nth-child(2n) { border-right: none; }
+    .tl-cell:nth-child(n+3) { border-top: 1px solid var(--color--border); }
+    .total-inner { grid-template-columns: 1fr; }
+    .total-cell { border-right: none; border-bottom: 1px solid var(--color--border); }
+    .total-cell:last-child { border-bottom: none; }
+    .pay-grid { grid-template-columns: 1fr; }
+    .pay-cell { border-right: none; border-bottom: 1px solid var(--color--border); }
+    .pay-cell:last-child { border-bottom: none; }
+    .ex-grid { grid-template-columns: 1fr 1fr; }
+    /* Reset desktop 3-col borders */
+    .ex-cell:nth-child(3n) { border-right: 1px solid var(--color--border); }
+    .ex-cell:nth-child(n+7) { border-bottom: 1px solid var(--color--border); }
+    /* Apply 2-col borders */
+    .ex-cell:nth-child(2n) { border-right: none; }
+    .ex-cell:last-child { border-right: none; border-bottom: none; }
+  }
+
+  @media (max-width: 600px) {
+    .header, .hero, .section, .footer { padding-left: 20px; padding-right: 20px; }
+    .footer { padding-top: 24px; padding-bottom: 24px; flex-direction: column; align-items: flex-start; gap: 16px; }
+    .footer-right { align-items: flex-start; }
+    .footer-line { white-space: normal; }
+    .hero { padding-top: 40px; padding-bottom: 40px; }
+    .ov-grid, .cond-grid, .tl-grid, .ex-grid { grid-template-columns: 1fr; }
+    .ov-cell, .cond-cell, .tl-cell { border-right: none; border-bottom: 1px solid var(--color--border); }
+    .ov-cell:last-child, .cond-cell:last-child, .tl-cell:last-child { border-bottom: none; }
+    .ov-cell:nth-child(3) { border-right: none; }
+    /* Override nth-child specificity to remove all right borders in 1-col */
+    .ex-cell,
+    .ex-cell:nth-child(2n),
+    .ex-cell:nth-child(3n) { border-right: none; }
+    .ex-cell:nth-child(n+7) { border-bottom: 1px solid var(--color--border); }
+    .ex-cell:last-child { border-bottom: none; }
+    .task-row { grid-template-columns: 1fr; gap: 4px; }
+    .phase-header { flex-wrap: wrap; gap: 6px; }
+    .phase-name { padding: 0 12px 0 12px; }
+    .phase-hrs { flex-basis: 100%; padding-left: 0; font-size: 10px; }
+    .total-val { font-size: 28px; }
+    .total-val.md { font-size: 18px; }
+    .section-label { margin-bottom: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <svg style="height:18px;width:auto;" viewBox="0 0 895.92 125.22" xmlns="http://www.w3.org/2000/svg" fill="var(--color--text)"><g><path d="M0,0h62.87l11.56,115.59h8.06L94.05,0h62.17v123.47h-31.7V46.59l5.78-38.7h-7.53l-14.01,115.59h-61.47L33.63,7.88h-7.88l6.13,38.7v76.88H0V0Z"/><path d="M201.39,0h68.48l34.5,123.47h-33.8l-9.98-37.3h-50.09l-9.98,37.3h-33.45L201.39,0ZM253.05,58.32l-13.66-50.44h-7.88l-13.48,50.44h35.03Z"/><path d="M313.99,0h62.52l30.47,115.59h7.88l-6.13-19.44V0h31.87v123.47h-62.52l-30.47-115.59h-7.88l6.13,19.44v96.15h-31.87V0Z"/><path d="M460.56,0h47.29c33.8,0,68.83,8.58,68.83,61.65s-35.03,61.82-68.83,61.82h-47.29V0ZM507.85,95.45c21.19,0,36.95-.7,36.95-33.8s-15.94-33.8-36.95-33.8h-15.41v67.6h15.41Z"/><path d="M667.21,0v27.84h-28.2v67.6h28.2v28.02h-88.09v-28.02h28.2V27.84h-28.2V0h88.09Z"/><path d="M685.77,0h62.87l11.56,115.59h8.06L779.81,0h62.17v123.47h-31.7V46.59l5.78-38.7h-7.53l-14.01,115.59h-61.47l-13.66-115.59h-7.88l6.13,38.7v76.88h-31.87V0Z"/><path d="M855.28,105.6c0-10.33,7.53-19.09,20.14-19.09s20.49,8.76,20.49,19.09-8.23,19.61-20.49,19.61-20.14-8.93-20.14-19.61Z"/></g></svg>
+  </div>
+  <div class="header-meta">
+    Ref. [REF] &nbsp;·&nbsp; Emitida: [DATA]<br>
+    Para: [NOME DO CLIENTE] &nbsp;·&nbsp; [TIPO DE PROJETO]
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="section-label">
+    <span class="lbl">PROPOSTA COMERCIAL</span>
+    <span class="dot">●</span>
+  </div>
+  <div class="hero-title">
+    <span class="sub">[Nome do Cliente]</span>
+    [TÍTULO DO<br>PROJETO]
+  </div>
+  <p class="hero-desc">
+    [Descrição breve do projeto — escopo, referências, tecnologias e abordagem.]
+  </p>
+</div>
+
+<!-- 01 OVERVIEW -->
+<div class="section">
+  <div class="section-label">
+    <span class="lbl">RESUMO DO PROJETO</span>
+    <span class="dot">●</span>
+  </div>
+  <div class="ov-grid">
+    <div class="ov-cell">
+      <div class="ov-lbl">Cliente</div>
+      <div class="ov-val">[—]</div>
+    </div>
+    <div class="ov-cell">
+      <div class="ov-lbl">Tipo de projeto</div>
+      <div class="ov-val">[—]</div>
+    </div>
+    <div class="ov-cell">
+      <div class="ov-lbl">Prazo</div>
+      <div class="ov-val">[—]</div>
+    </div>
+    <div class="ov-cell">
+      <div class="ov-lbl">Horas estimadas</div>
+      <div class="ov-val">[—]</div>
+    </div>
+    <div class="ov-cell">
+      <div class="ov-lbl">Investimento</div>
+      <div class="ov-val">[—]</div>
+    </div>
+    <div class="ov-cell">
+      <div class="ov-lbl">Revisões incluídas</div>
+      <div class="ov-val">[—]</div>
+    </div>
+  </div>
+  <div class="note">
+    [Nota contextual sobre a estimativa — referências, premissas de base ou observações relevantes para o cliente.]
+  </div>
+</div>
+
+<!-- 02 FASES -->
+<div class="section">
+  <div class="section-label">
+    <span class="lbl">FASES E ENTREGÁVEIS</span>
+    <span class="dot">●</span>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <span class="phase-id">(A)</span>
+      <span class="phase-name">Discovery & Briefing</span>
+      <span class="phase-hrs"><strong>~[X]h</strong> estimadas</span>
+    </div>
+    <ul class="task-list">
+      <li class="task-row">
+        <span class="task-name">Briefing & referências</span>
+        <span class="task-desc">Reunião de alinhamento, recolha de objetivos, público-alvo, mood board e benchmarking</span>
+      </li>
+      <li class="task-row">
+        <span class="task-name">Sitemap & arquitetura</span>
+        <span class="task-desc">Definição da estrutura de páginas e hierarquia de conteúdo</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <span class="phase-id">(B)</span>
+      <span class="phase-name">UX/UI Design</span>
+      <span class="phase-hrs"><strong>~[X]h</strong> estimadas</span>
+    </div>
+    <ul class="task-list">
+      <li class="task-row">
+        <span class="task-name">Wireframes</span>
+        <span class="task-desc">Estrutura e hierarquia de conteúdo em baixa fidelidade, validação antes do design visual</span>
+      </li>
+      <li class="task-row">
+        <span class="task-name">Design visual completo</span>
+        <span class="task-desc">Design das páginas em alta fidelidade no Figma</span>
+      </li>
+      <li class="task-row">
+        <span class="task-name">Criação de assets visuais</span>
+        <span class="task-desc">Ilustrações e gráficos conforme necessário para as secções-chave</span>
+      </li>
+      <li class="task-row">
+        <span class="task-name">Design system / guia de estilo</span>
+        <span class="task-desc">Componentes reutilizáveis, tipografia, cores, espaçamentos e estados</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <span class="phase-id">(C)</span>
+      <span class="phase-name">Desenvolvimento</span>
+      <span class="phase-hrs"><strong>~[X]h</strong> estimadas</span>
+    </div>
+    <ul class="task-list">
+      <li class="task-row">
+        <span class="task-name">Setup + estrutura base</span>
+        <span class="task-desc">Configuração do projeto, variáveis globais e estrutura base</span>
+      </li>
+      <li class="task-row">
+        <span class="task-name">Dev das páginas</span>
+        <span class="task-desc">Desenvolvimento fiel ao design, layout responsivo</span>
+      </li>
+      <li class="task-row">
+        <span class="task-name">Animações</span>
+        <span class="task-desc">Entradas de elementos e transições, com atenção a performance e mobile</span>
+      </li>
+      <li class="task-row">
+        <span class="task-name">Formulário de contacto</span>
+        <span class="task-desc">Formulário com validação e integração de email</span>
+      </li>
+      <li class="task-row">
+        <span class="task-name">Responsivo mobile/tablet</span>
+        <span class="task-desc">Ajuste e validação dos breakpoints tablet e mobile para todas as páginas</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <span class="phase-id">(D)</span>
+      <span class="phase-name">QA & Entrega</span>
+      <span class="phase-hrs"><strong>~[X]h</strong> estimadas</span>
+    </div>
+    <ul class="task-list">
+      <li class="task-row">
+        <span class="task-name">QA cross-browser + responsive</span>
+        <span class="task-desc">Testes em Chrome, Safari, Firefox e Edge; validação de todos os breakpoints</span>
+      </li>
+      <li class="task-row">
+        <span class="task-name">SEO básico + RGPD</span>
+        <span class="task-desc">Titles, metas, headings, alt texts, sitemap e banner de consentimento de cookies</span>
+      </li>
+      <li class="task-row">
+        <span class="task-name">Handoff & publicação</span>
+        <span class="task-desc">Documentação de edição de conteúdos, publicação em produção e validação final</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="total-block">
+    <div class="total-inner">
+      <div class="total-cell">
+        <div class="total-lbl">Investimento</div>
+        <div class="total-val md">€[X]</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 03 CONDIÇÕES -->
+<div class="section">
+  <div class="section-label">
+    <span class="lbl">CONDIÇÕES COMERCIAIS</span>
+    <span class="dot">●</span>
+  </div>
+  <div class="cond-grid">
+    <div class="cond-cell">
+      <div class="cond-title">Revisões incluídas</div>
+      <div class="cond-item"><strong>2 rodadas de revisão</strong> por fase, com consolidação de feedback</div>
+      <div class="cond-item">Revisões adicionais orçamentadas separadamente</div>
+      <div class="cond-item">Cada fase aprovada antes de avançar para a seguinte</div>
+    </div>
+    <div class="cond-cell">
+      <div class="cond-title">Pagamento</div>
+      <div class="cond-item"><strong>50%</strong> na assinatura do contrato / início</div>
+      <div class="cond-item"><strong>50%</strong> na entrega final e publicação</div>
+      <div class="cond-item">Faturação em EUR · Porto, Portugal</div>
+    </div>
+    <div class="cond-cell">
+      <div class="cond-title">Validade & prazo</div>
+      <div class="cond-item">Proposta válida por <strong>30 dias</strong> (até [DATA])</div>
+      <div class="cond-item">Prazo estimado: <strong>[X]–[X] semanas</strong> após início</div>
+      <div class="cond-item">Calendário detalhado definido após aprovação</div>
+    </div>
+    <div class="cond-cell">
+      <div class="cond-title">Comunicação</div>
+      <div class="cond-item">Check-ins semanais de alinhamento incluídos</div>
+      <div class="cond-item">Entregas parciais validadas a cada fase</div>
+      <div class="cond-item">Feedback consolidado por fase (não incremental)</div>
+    </div>
+  </div>
+</div>
+
+<!-- 04 TIMELINE -->
+<div class="section">
+  <div class="section-label">
+    <span class="lbl">PLANO DE EXECUÇÃO</span>
+    <span class="dot">●</span>
+  </div>
+  <div class="tl-grid">
+    <div class="tl-cell">
+      <div class="tl-id">(A)</div>
+      <div class="tl-phase">Discovery</div>
+      <div class="tl-weeks">Sem. [X]</div>
+      <div class="tl-desc">Briefing, referências, sitemap e arquitetura de informação</div>
+    </div>
+    <div class="tl-cell">
+      <div class="tl-id">(B)</div>
+      <div class="tl-phase">UX/UI Design</div>
+      <div class="tl-weeks">Sem. [X]–[X]</div>
+      <div class="tl-desc">Wireframes, design visual, assets e design system</div>
+    </div>
+    <div class="tl-cell">
+      <div class="tl-id">(C)</div>
+      <div class="tl-phase">Desenvolvimento</div>
+      <div class="tl-weeks">Sem. [X]–[X]</div>
+      <div class="tl-desc">[Plataforma], animações, galeria, formulário</div>
+    </div>
+    <div class="tl-cell">
+      <div class="tl-id">(D)</div>
+      <div class="tl-phase">QA & Go-Live</div>
+      <div class="tl-weeks">Sem. [X]–[X]</div>
+      <div class="tl-desc">Testes, ajustes, SEO, RGPD, publicação e handoff</div>
+    </div>
+  </div>
+</div>
+
+<!-- 05 EXCLUSÕES -->
+<div class="section">
+  <div class="section-label">
+    <span class="lbl">PREMISSAS E EXCLUSÕES</span>
+    <span class="dot">●</span>
+  </div>
+  <div class="ex-grid">
+    <div class="ex-cell"><span class="ex-x">✕</span>Conteúdos (textos, imagens, vídeos, logótipo) — a fornecer pelo cliente</div>
+    <div class="ex-cell"><span class="ex-x">✕</span>Plano da plataforma — por conta do cliente</div>
+    <div class="ex-cell"><span class="ex-x">✕</span>Domínio e configuração DNS — não incluídos</div>
+    <div class="ex-cell"><span class="ex-x">✕</span>Copy / redação — não incluída, a contratar separadamente</div>
+    <div class="ex-cell"><span class="ex-x">✕</span>Fotografias e vídeos profissionais — não incluídos</div>
+    <div class="ex-cell"><span class="ex-x">✕</span>[Exclusão específica do projeto]</div>
+    <div class="ex-cell"><span class="ex-x">✕</span>[Exclusão específica do projeto]</div>
+    <div class="ex-cell"><span class="ex-x">✕</span>[Exclusão específica do projeto]</div>
+    <div class="ex-cell"><span class="ex-x">✕</span>Alterações de escopo após aprovação — sujeitas a novo orçamento</div>
+  </div>
+</div>
+
+<!-- 06 PAGAMENTO -->
+<div class="section">
+  <div class="section-label">
+    <span class="lbl">RESUMO DE PAGAMENTO</span>
+    <span class="dot">●</span>
+  </div>
+  <div class="pay-grid">
+    <div class="pay-cell">
+      <div class="pay-lbl">1.ª prestação — na assinatura do contrato</div>
+      <div class="pay-val">€[X]</div>
+      <div class="pay-desc">50% do valor base · início imediato do projeto</div>
+    </div>
+    <div class="pay-cell">
+      <div class="pay-lbl">2.ª prestação — na entrega e publicação</div>
+      <div class="pay-val">€[X]</div>
+      <div class="pay-desc">50% do valor base · após aprovação final</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-left">
+    <svg style="height:18px;width:auto;" viewBox="0 0 895.92 125.22" xmlns="http://www.w3.org/2000/svg" fill="var(--color--text)"><g><path d="M0,0h62.87l11.56,115.59h8.06L94.05,0h62.17v123.47h-31.7V46.59l5.78-38.7h-7.53l-14.01,115.59h-61.47L33.63,7.88h-7.88l6.13,38.7v76.88H0V0Z"/><path d="M201.39,0h68.48l34.5,123.47h-33.8l-9.98-37.3h-50.09l-9.98,37.3h-33.45L201.39,0ZM253.05,58.32l-13.66-50.44h-7.88l-13.48,50.44h35.03Z"/><path d="M313.99,0h62.52l30.47,115.59h7.88l-6.13-19.44V0h31.87v123.47h-62.52l-30.47-115.59h-7.88l6.13,19.44v96.15h-31.87V0Z"/><path d="M460.56,0h47.29c33.8,0,68.83,8.58,68.83,61.65s-35.03,61.82-68.83,61.82h-47.29V0ZM507.85,95.45c21.19,0,36.95-.7,36.95-33.8s-15.94-33.8-36.95-33.8h-15.41v67.6h15.41Z"/><path d="M667.21,0v27.84h-28.2v67.6h28.2v28.02h-88.09v-28.02h28.2V27.84h-28.2V0h88.09Z"/><path d="M685.77,0h62.87l11.56,115.59h8.06L779.81,0h62.17v123.47h-31.7V46.59l5.78-38.7h-7.53l-14.01,115.59h-61.47l-13.66-115.59h-7.88l6.13,38.7v76.88h-31.87V0Z"/><path d="M855.28,105.6c0-10.33,7.53-19.09,20.14-19.09s20.49,8.76,20.49,19.09-8.23,19.61-20.49,19.61-20.14-8.93-20.14-19.61Z"/></g></svg>
+    &nbsp;·&nbsp; Porto, Portugal
+  </div>
+  <div class="footer-right">
+    <span class="footer-line">Ref. [REF]</span>
+    <span class="footer-line">Emitida: [DATA] &nbsp;·&nbsp; Válida até: [DATA]</span>
+    <span class="footer-line">Amanda Lemos Mandim &nbsp;·&nbsp; Product Designer &amp; Developer</span>
+  </div>
+</div>
+
+</body>
+</html>

@@ -57,6 +57,7 @@ Running the day-to-day: personal task management, planning, and execution.
 
 | Skill | Description |
 |---|---|
+| [budgets-and-estimates](productivity-operations/budgets-and-estimates/SKILL.md) | Builds client quotes and commercial proposals for MANDIM. — hour estimates, pricing, and a branded HTML proposal from the official template. |
 | [daily-ops-copilot](productivity-operations/daily-ops-copilot/SKILL.md) | A configurable Notion + Slack (+ optional Calendar) task and project command center — daily sweeps, capacity-aware planning, and sprint reviews. |
 
 ## License
