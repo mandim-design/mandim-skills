@@ -59,13 +59,15 @@ Running the day-to-day: personal task management, planning, and execution.
 |---|---|
 | [budgets-and-estimates](productivity-operations/budgets-and-estimates/SKILL.md) | Builds client quotes and commercial proposals for MANDIM. — hour estimates, pricing, and a branded HTML proposal from the official template. |
 | [daily-ops-copilot](productivity-operations/daily-ops-copilot/SKILL.md) | A configurable Notion + Slack (+ optional Calendar) task and project command center — daily sweeps, capacity-aware planning, and sprint reviews. |
+| [teach](productivity-operations/teach/SKILL.md) | Turns the current directory into a stateful learning workspace — mission, vetted resources, learning records, and short interactive HTML lessons. |
 
 ## License
 
-MIT — see [LICENSE](LICENSE). Two skills are third-party and carry their own license, which applies to that folder specifically:
+MIT — see [LICENSE](LICENSE). Three skills are third-party and carry their own license, which applies to that folder specifically:
 
 - `web-artifacts-builder` — [Apache 2.0](ai-engineering/web-artifacts-builder/LICENSE.txt), from Anthropic.
 - `humanizer` — [MIT](writing-editing/humanizer/LICENSE), by Siqi Chen ([blader/humanizer](https://github.com/blader/humanizer)).
+- `teach` — [MIT](productivity-operations/teach/LICENSE), by Matt Pocock ([mattpocock/skills](https://github.com/mattpocock/skills)).
 
 ## Adding a new skill
 
