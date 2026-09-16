@@ -51,6 +51,7 @@ Building and tuning the AI systems and tooling themselves.
 |---|---|
 | [ai-workflow-architect](ai-engineering/ai-workflow-architect/SKILL.md) | Designs AI systems, automations, and agent workflows using tools like Claude, MCP, and APIs. |
 | [prompt-optimizer](ai-engineering/prompt-optimizer/SKILL.md) | Transforms rough ideas and weak prompts into production-quality prompts, using real technique. |
+| [review-past-performance](ai-engineering/review-past-performance/SKILL.md) | Audits recent Claude Code sessions from the local transcripts and turns the friction into named fixes in named files. |
 | [web-artifacts-builder](ai-engineering/web-artifacts-builder/SKILL.md) | Bootstraps and bundles web-based Claude Artifacts, including a shadcn/ui component set. |
 
 ### 🗂️ Productivity & Operations
