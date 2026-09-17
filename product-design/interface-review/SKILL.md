@@ -43,6 +43,20 @@ If the requested scope is too large to inspect credibly, narrow it to the highes
 
 Identify the framework, styling system, component library, design tokens, supported viewports, and available preview or test commands. For copy, inspect nearby interface text, the product's terminology, localization conventions, and any voice or content style guide before proposing a change.
 
+Check `package.json` or the page's loaded scripts for a smooth-scroll or scroll-animation library — Lenis, Locomotive, GSAP ScrollTrigger, Framer's `useScroll`. If one is present, read the next section before touching the page.
+
+### Walking a scroll-driven page
+
+On a page that hijacks or drives animation from scroll, the usual tools lie to you. Establish the ground rules before you file anything:
+
+- **Programmatic scrolling is not user scrolling.** Once Lenis or Locomotive is installed, `window.scrollTo` and `element.scrollIntoView` fight the library's own loop: the page lands somewhere you did not ask for, or reports the right `scrollY` while painting a different frame. Drive the page with real wheel events and real clicks on real links. If you must jump, jump and then wait for the position to hold steady across two reads before you believe it.
+- **A blank capture is not a blank page.** After an instant jump, a screenshot can beat the compositor: the DOM reports the section in place, full opacity, correct colors, and the image still comes back empty. Before filing anything from a blank frame, re-capture after the scroll settles and confirm the same emptiness twice. A screenshot that disagrees with a DOM read is a capture artifact until proven otherwise — this is the single most productive false lead on these pages.
+- **Distinguish a resting state from a transit state.** A pinned sequence puts the user in control of the timeline, so every position is one they can stop at. A gap that only exists mid-scroll is not a finding; a gap that survives once inertia stops is.
+- **Pinning breaks the mapping from scroll offset to content.** A pin spacer means the element at scroll position N is not the element at document offset N. Verify anchor links and deep links by loading each one cold, not by jumping in an already-scrolled page.
+- **Deep links and find-in-page bypass the triggers.** Load every in-page anchor as a fresh navigation and confirm the target section renders in its finished state, not its pre-animation one.
+- **The theme may repaint as it scrolls.** A script that swaps CSS variables per section means contrast, focus rings, and image outlines each have as many states as the page has themes. Measure them all.
+- **Motion preference is a JS concern here, not a CSS one.** A CSS `@media (prefers-reduced-motion: reduce)` block does not reach a GSAP timeline or a Lenis instance. Grep the scripts for `prefers-reduced-motion`; if nothing reads it, the preference is unimplemented no matter how many CSS rules mention it.
+
 ### Review in this order
 
 Foundational failures must not be hidden by polish:
@@ -98,6 +112,20 @@ Icon-only buttons need a descriptive `aria-label`. Visible label text must appea
 ### 8. Don't Rely on Color Alone
 
 Status needs a redundant cue: icon, text, or underline alongside the color. Determine which WCAG contrast requirement applies from the content and state, then measure the rendered foreground/background pair. When contrast fails, report the pair and the requirement it misses; do not change the project's colors unless asked.
+
+**Measure what the eye receives, not what the declaration says.** A `color` value read on its own is not the rendered pair. Before computing a ratio, fold in every ancestor `opacity` down to the element, composite the result over the nearest ancestor with a real background, and only then measure. Text at `opacity: 0.6` is the most common way a failing pair hides from an audit: the declared ink passes, the painted ink does not. The same care applies to text over gradients, images, and video — measure the worst pixel region the text crosses, not an average.
+
+```js
+// Effective color = declared color composited over the backdrop by the opacity chain
+function effectiveOpacity(el) {
+  let e = el, op = 1;
+  while (e && e !== document.documentElement) { op *= parseFloat(getComputedStyle(e).opacity); e = e.parentElement; }
+  return op;
+}
+// effective = fg.map((v, i) => v * op + bg[i] * (1 - op))
+```
+
+On a page that repaints itself as it scrolls — a theme that inverts, a section that swaps its palette — measure once per theme, not once per page. A pair that passes in the light state can fail in the dark one.
 
 ### 9. Honor prefers-reduced-motion
 
@@ -340,113 +368,6 @@ Severity is one shared scale:
 Within a severity, rank by reach and leverage. A token or shared-component fix outranks the same symptom in one leaf component.
 
 Each row is one root cause: list every confirmed location in the same row rather than producing a row per occurrence. Respect the mode's finding cap, and never pad the report to reach it. If there are no findings, omit the table and state "No actionable interface findings."
-
-### Annotate the frame
-
-Every row in the findings table also lands on the canvas as a card. Cards go on one top-level layer named `Interface review`, in the empty space to the left and right of the frame — never on top of the design, and never overlapping the frame's own titles or chrome.
-
-Never reparent, edit, lock, or restyle the frames under review. Annotations are additive; the review is otherwise read-only.
-
-#### Card anatomy
-
-Each card is a vertical auto-layout frame: `280px` fixed width, height hugging its contents, `12px` padding, `8px` item spacing, `8px` corner radius, `oklch(1 0 0)` fill, `1px` `oklch(0 0 0 / 0.08)` stroke.
-
-Three stacked children, in order:
-
-1. **Severity pill** — hug-width rounded rect, `4px` radius, `2px` vertical and `6px` horizontal padding, filled with the severity color below. Label is the severity word in uppercase, `9px`, weight `600`, `0.04em` letter-spacing.
-2. **Title** — `#4 CTA contrast`. The finding number, then a three-to-five-word summary. `12px`, weight `600`, `oklch(0.15 0 0)`.
-3. **Body** — one or two sentences: what is wrong, then what to do. `11px`, weight `400`, line-height `1.4`, `oklch(0.45 0 0)`. Cap at `240` characters; the full reasoning stays in the findings table.
-
-| Severity | Pill fill | Pill text |
-| --- | --- | --- |
-| `HIGH` | `oklch(0.577 0.245 27.325)` red | `oklch(1 0 0)` white |
-| `MEDIUM` | `oklch(0.705 0.213 47.604)` orange | `oklch(0.15 0 0)` near-black |
-| `LOW` | `oklch(0.852 0.199 91.936)` yellow | `oklch(0.15 0 0)` near-black |
-
-White on orange and yellow measures below 4.5:1; use the near-black. The pill names the severity in words, so color never carries it alone and no separate legend is needed.
-
-#### Building the card
-
-Hug sizing is not the default, and children only participate in auto-layout once appended. Follow this sequence exactly:
-
-```js
-await figma.loadFontAsync({ family: "Inter", style: "Semi Bold" });
-await figma.loadFontAsync({ family: "Inter", style: "Regular" });
-
-const card = figma.createFrame();
-card.layoutMode = "VERTICAL";            // must come before any sizing property
-card.primaryAxisSizingMode = "AUTO";     // hug height
-card.counterAxisSizingMode = "FIXED";    // fixed width
-card.resize(280, card.height);
-card.verticalPadding = 12;
-card.horizontalPadding = 12;
-card.itemSpacing = 8;
-
-// Children must be appended to the card. Creating a node and setting its
-// x/y puts it on the canvas as a sibling: the card then hugs to nothing
-// and its contents float outside the frame.
-card.appendChild(pill);
-card.appendChild(title);
-card.appendChild(body);
-
-// Text wraps to the card width and grows downward
-for (const text of [title, body]) {
-  text.layoutAlign = "STRETCH";
-  text.textAutoResize = "HEIGHT";
-}
-
-// The pill hugs its own label instead of stretching
-pill.layoutMode = "HORIZONTAL";
-pill.primaryAxisSizingMode = "AUTO";
-pill.counterAxisSizingMode = "AUTO";
-pill.layoutAlign = "INHERIT";
-pillLabel.textAutoResize = "WIDTH_AND_HEIGHT";
-
-// x and y are ignored on auto-layout children. Position the card only.
-card.x = gutterX;
-card.y = stackY;
-```
-
-Load every font with `figma.loadFontAsync` before setting `characters`. Text set with an unloaded font measures at zero, so the card hugs to nothing.
-
-Gate on the result before positioning anything else:
-
-```js
-if (card.children.length !== 3 || card.height < 56) {
-  throw new Error(
-    `Finding ${n}: card built empty — ${card.children.length} children, ${card.height}px tall`
-  );
-}
-```
-
-A correctly built card is at least `56px` tall. Anything near `26px` is padding with no content in between.
-
-| Symptom | Cause |
-| --- | --- |
-| Card hugs to ~`26px` with contents floating outside it | Children created but never `appendChild`ed to the card |
-| Every card is the same height | `primaryAxisSizingMode` left at `FIXED` |
-| Card is as wide as its longest line | `counterAxisSizingMode` left at `AUTO` |
-| Body text runs off the card on one line | Text missing `layoutAlign = "STRETCH"` and `textAutoResize = "HEIGHT"` |
-| Pill spans the full card width | Pill missing `AUTO` sizing on both axes |
-| Children ignore the positions you set | Expected — auto-layout owns child position; set `x`/`y` on the card only |
-
-#### Placement
-
-Cards sit in two gutters: one starting `80px` to the left of the frame, one `80px` to the right. Assign each card to the gutter nearer its target node, then within a gutter sort by the target's vertical position and stack top to bottom with `16px` between cards. If a stack would run past the frame's bottom edge, move the overflow to the other gutter rather than shrinking cards or letting them overlap.
-
-Position cards only after all children are appended and sized; a card's final height is not known until then.
-
-Draw a `1.5px` dashed connector from the card's inner edge to the target node's nearest edge, stroked in that finding's severity color, routed as a single elbow: horizontal out of the card, then horizontal into the node. End it with a `4px` dot on the node, not an arrowhead. A finding that spans the whole flow gets no connector.
-
-Card and connector for one finding are grouped together and named `#4 MEDIUM Layout`.
-
-#### Scale
-
-The values above assume a frame between `1000px` and `1600px` wide. Outside that range, multiply every annotation dimension and type size by `frameWidth / 1400` so cards stay readable at the zoom level where the whole frame fits on screen.
-
-#### Re-running
-
-Delete the existing `Interface review` layer before drawing the new one. Annotations replace; they never stack. If the file is view-only or the user asked for the report only, output the table alone and say the frame was not annotated.
 
 ### Considered but Rejected
 
